@@ -8,10 +8,11 @@ const readMockFile = () => fs.readFile(path.resolve(__dirname, `./${PRODUCTS_MOC
 
 module.exports.getProductsList = async () => {
   const productsRaw = await readMockFile();
+  const products = JSON.parse(productsRaw.toString('utf-8'));
 
   return {
     statusCode: 200,
-    body: productsRaw.toString('utf-8'),
+    body: JSON.stringify(products),
   };
 };
 
