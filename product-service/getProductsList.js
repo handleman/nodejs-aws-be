@@ -7,7 +7,7 @@ module.exports = async () => {
 
     try {
         const { rows: products } = await client.query(`
-            select a.id, a.title, a.description, a.image, b.count from product a
+            select a.id, a.title, a.description, a.image, a.price, b.count from product a
             join stock b on (a.id = b.product_id);
         `);
         return {
