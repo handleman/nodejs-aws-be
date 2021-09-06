@@ -1,11 +1,27 @@
-const {readMockFile} = require('./utils.js');
+const { Client } = require('pg');
+const { dbOptions } = require('./dbOptions');
 
 module.exports = async () => {
-    const productsRaw = await readMockFile();
-    const products = JSON.parse(productsRaw.toString('utf-8'));
+    const client = new Client(dbOptions);
+    await client.connect();
 
-    return {
-        statusCode: 200,
-        body: JSON.stringify(products),
-    };
+    try {
+        const { rows: products } = await client.query(`
+            select a.id, a.title, a.description, a.image, b.count from product a
+            join stock b on (a.id = b.product_id);
+        `);
+        return {
+            statusCode: 200,
+            body: JSON.stringify(products),
+        }
+
+    } catch (error) {
+        return {
+            statusCode: 500,
+            body: JSON.stringify(error),
+        };
+    } finally {
+        client.end();
+    }
+
 };
