@@ -3,7 +3,11 @@ const { dbOptions } = require('./dbOptions');
 const { headers } = require('./headers');
 
 module.exports = async (event) => {
-  const { body:product } = event;
+  console.log('event:', event);
+  
+  const { body } = event;
+  const product = JSON.parse(body);
+
   const { title, description, image, price, count } = product;
   const client = new Client(dbOptions);
   await client.connect();
