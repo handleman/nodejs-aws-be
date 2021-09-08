@@ -1,5 +1,6 @@
 const { Client } = require('pg');
 const { dbOptions } = require('./dbOptions');
+const { headers } = require('./headers');
 
 module.exports = async (event) => {
   const { id } = event.pathParameters;
@@ -13,14 +14,16 @@ module.exports = async (event) => {
       `);
     return {
       statusCode: 200,
+      headers,
       body: JSON.stringify(product),
     }
   } catch (error) {
     return {
       statusCode: 500,
+      headers,
       body: JSON.stringify(error),
     };
   } finally {
-    client.end();
+    await client.end();
   }
 };

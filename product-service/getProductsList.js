@@ -1,5 +1,6 @@
 const { Client } = require('pg');
 const { dbOptions } = require('./dbOptions');
+const { headers } = require('./headers');
 
 module.exports = async () => {
     const client = new Client(dbOptions);
@@ -12,16 +13,18 @@ module.exports = async () => {
         `);
         return {
             statusCode: 200,
+            headers,
             body: JSON.stringify(products),
         }
 
     } catch (error) {
         return {
             statusCode: 500,
+            headers,
             body: JSON.stringify(error),
         };
     } finally {
-        client.end();
+       await client.end();
     }
 
 };
