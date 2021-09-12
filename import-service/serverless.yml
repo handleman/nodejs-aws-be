@@ -30,4 +30,13 @@ functions:
          path: import
          method: get
          cors: true
+  importFileParser:
+    handler: handler.importFileParser
+    events:
+      - s3:
+        bucket: aws-fe-shop-import
+        event: s3:ObjectCreated:*
+        rules:
+          - prefix: uploaded/
+        existing: true
 

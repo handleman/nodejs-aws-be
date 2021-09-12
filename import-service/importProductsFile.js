@@ -6,8 +6,6 @@ module.exports = async (event) => {
     const s3 = new AWS.S3({region: 'eu-west-1'});
     const {name} = event.queryStringParameters;
     const destinationFileName = `uploaded/${name}`;
-    console.log('name', name);
-    console.log('destinationFileName', destinationFileName);
     
     const options = {
         Bucket: IMPORT_BUCKET_NAME,
@@ -15,9 +13,6 @@ module.exports = async (event) => {
         Expires: 60,
         ContentType: 'text/csv'
     };
-
-    console.log('options', options);
-    
 
     try {
        return new Promise((resolve, reject)=>{
