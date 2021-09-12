@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "init:productservice": "cd ./product-service && serverless deploy",
+    "init:importservice": "cd ./import-service && serverless deploy",
     "test": "jest"
   },
   "repository": {
