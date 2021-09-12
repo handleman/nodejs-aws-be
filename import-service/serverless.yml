@@ -1,0 +1,33 @@
+service: import-service
+
+frameworkVersion: '2'
+
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  lambdaHashingVersion: 20201221
+  region: eu-west-1
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action: "s3:ListBucket"
+      Resource:
+        - "arn:aws:s3:::aws-fe-shop-import"
+    - Effect: "Allow"
+      Action:
+        - "s3:*"
+      Resource:
+        - "arn:aws:s3:::aws-fe-shop-import/*"
+
+# arn:aws:s3:::aws-fe-shop-import
+functions:
+  importProductsFile:
+    handler: handler.importProductsFile
+    events:
+      - http:
+         path: import
+         method: get
+         cors: true
+
