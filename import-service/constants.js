@@ -1,5 +1,5 @@
 
-const IMPORT_BUCKET_NAME = 'aws:s3:::aws-fe-shop-import'
+const IMPORT_BUCKET_NAME = 'aws-fe-shop-import'
 
 
 module.exports = {
