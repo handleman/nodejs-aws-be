@@ -19,5 +19,8 @@
   "homepage": "https://github.com/handleman/nodejs-aws-be#readme",
   "devDependencies": {
     "jest": "^27.0.6"
+  },
+  "dependencies": {
+    "pg": "^8.7.1"
   }
 }
