@@ -16,6 +16,10 @@ provider:
       Resource:
         - "arn:aws:s3:::aws-fe-shop-import"
     - Effect: "Allow"
+      Action: "s3:getObject"
+      Resource:
+        - "arn:aws:s3:::aws-fe-shop-import"
+    - Effect: "Allow"
       Action:
         - "s3:*"
       Resource:
