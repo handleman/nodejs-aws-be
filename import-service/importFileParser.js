@@ -5,14 +5,14 @@ const { IMPORT_BUCKET_NAME } = require('./constants');
 module.exports = async (event) => {
     const s3 = new AWS.S3({region: 'eu-west-1'});
     const {Records} = event;
-    console.log('importFileParser Event', event);
-    const readStream = async (stream, Key)=> {
+
+    const readStream = async (stream, Key, dataProcessor)=> {
         return new Promise((resolve, reject)=>{
             try{
 
                 stream.pipe(csv())
-                    .on('data', data=>{
-                        console.log(data);
+                    .on('data', async(data)=>{
+                        await dataProcessor(data)
                     })
                     .on('end', async()=>{
                         console.log(`Copy from ${IMPORT_BUCKET_NAME}/${Key}`);
@@ -31,6 +31,15 @@ module.exports = async (event) => {
             }
         });
     }
+    const sendToQueue = async(message) =>{
+        const sqs = new AWS.SQS();
+        const QUEUE_URL = process.env.SQS_URL;
+        return sqs.sendMessage({
+            QueueUrl: QUEUE_URL,
+            MessageBody:message
+        }, ()=> console.log('send message for', message)
+        )
+    };
 
     for (const record of Records){
         const {key: Key} = record.s3.object;
@@ -39,7 +48,7 @@ module.exports = async (event) => {
             Bucket: IMPORT_BUCKET_NAME,
             Key
         }).createReadStream();
-        await readStream(stream, Key);
+        await readStream(stream, Key, sendToQueue);
     }
 
 };
