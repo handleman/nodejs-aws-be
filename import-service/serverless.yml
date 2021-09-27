@@ -80,8 +80,8 @@ functions:
     events:
       - sqs:
           batchSize: 5
-          arn:
-            Fn::GetAtt
+          arn: 
+            Fn::GetAtt: 
               - SQSQueue
               - Arn
 
