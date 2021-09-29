@@ -3,7 +3,7 @@ const { Client } = require('pg');
 const { dbOptions } = require('./dbOptions');
 
 module.exports = async (event) => {
-    const products = event.Records.map(({ body }) => body);
+    const products = event.Records.map(({ body }) => JSON.parse(body));
     console.log('products', products);
     
     const sns = new AWS.SNS({ region: 'eu-west-1' });
@@ -25,6 +25,8 @@ module.exports = async (event) => {
                 insert into stock (product_id, count) values
                 ('${id}','${count}');
             `);
+            console.log('product inserted', product);
+            
         }
         sns.publish({
             Subject: 'Products were imported successfully',

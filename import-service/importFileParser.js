@@ -31,14 +31,14 @@ module.exports = async (event) => {
             }
         });
     }
-    const sendToQueue = async(message) =>{
+    const sendToQueue = (message) =>{
         const sqs = new AWS.SQS();
         const QUEUE_URL = process.env.SQS_URL;
         return sqs.sendMessage({
             QueueUrl: QUEUE_URL,
-            MessageBody:message
+            MessageBody:JSON.stringify(message)
         }, ()=> console.log('send message for', message)
-        )
+        ).promise();
     };
 
     for (const record of Records){
