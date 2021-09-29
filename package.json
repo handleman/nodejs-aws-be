@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "init:productservice": "cd ./product-service && serverless deploy",
-    "init:importservice": "cd ./import-service && serverless deploy",
+    "init:productservice": "cd ./product-service && serverless deploy && cd ..",
+    "init:importservice": "cd ./import-service && serverless deploy && cd ..",
+    "init:all": "npm run init:productservice  && npm run init:importservice",
     "test": "jest"
   },
   "repository": {
