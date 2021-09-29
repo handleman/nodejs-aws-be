@@ -4,19 +4,20 @@ const { dbOptions } = require('./dbOptions');
 
 module.exports = async (event) => {
     const products = event.Records.map(({ body }) => body);
-
+    console.log('products', products);
+    
     const sns = new AWS.SNS({ region: 'eu-west-1' });
 
+    const client = new Client(dbOptions);
+    await client.connect();
     try {
-        const client = new Client(dbOptions);
-        await client.connect();
         for (product of products) {
             const { title, description, image, price, count } = product;
-
-            const response = await client.query(`
+            const query = `
                 insert into product (image, title, description, price) values
-                ('${image}','${title}','${description}',${price}) returning *;
-            `);
+                ('${image}','${title.replace(/["']/g, '&quot;')}','${description.replace(/["']/g, '&quot;')}',${price}) returning *;
+            `;
+            const response = await client.query(query);
             const { rows } = response;
             const created = rows[0];
             const { id } = created;
@@ -30,14 +31,12 @@ module.exports = async (event) => {
             Message: JSON.stringify(products),
             TopicAnn: process.env.SNS_ARN
         }, () => {
-            console.log('Email notification has sent for adding products: ', JSON.stringify());
-
+            console.log('Email notification has sent for adding products: ', JSON.stringify(products, null, 1));
         });
 
     } catch (error) {
         return {
             statusCode: 500,
-            headers,
             body: JSON.stringify(error),
         };
     } finally {
