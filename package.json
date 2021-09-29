@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "init:productservice": "cd ./product-service && serverless deploy",
+    "init:importservice": "cd ./import-service && serverless deploy",
     "test": "jest"
   },
   "repository": {
@@ -21,6 +22,7 @@
     "jest": "^27.0.6"
   },
   "dependencies": {
+    "aws-sdk": "^2.987.0",
     "pg": "^8.7.1"
   }
 }
