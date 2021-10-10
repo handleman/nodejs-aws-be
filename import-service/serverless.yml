@@ -1,6 +1,7 @@
 service: import-service
 
 frameworkVersion: '2'
+useDotenv: true
 
 
 provider:
@@ -9,6 +10,17 @@ provider:
   stage: dev
   lambdaHashingVersion: 20201221
   region: eu-west-1
+
+  environment:
+    SQS_URL:
+      Ref: SQSQueue
+    SNS_ARN:
+      Ref: SNSTopic
+    PG_HOST: ${env:PG_HOST}
+    PG_PORT: ${env:PG_PORT}
+    PG_DATABASE: ${env:PG_DATABASE}
+    PG_USERNAME: ${env:PG_USERNAME}
+    PG_PASSWORD: ${env:PG_PASSWORD}
 
   iamRoleStatements:
     - Effect: "Allow"
@@ -24,6 +36,32 @@ provider:
         - "s3:*"
       Resource:
         - "arn:aws:s3:::aws-fe-shop-import/*"
+    - Effect: "Allow"
+      Action: "sqs:*"
+      Resource:
+        - Fn::GetAtt: [SQSQueue, Arn]
+    - Effect: "Allow"
+      Action: "sns:*"
+      Resource:
+        Ref: SNSTopic
+
+resources:
+  Resources:
+    SQSQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: catalogItemsQueue
+    SNSTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: createProductTopic
+    SNSSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: pavel.handleman@yandex.ru
+        Protocol: email
+        TopicArn:
+          Ref: SNSTopic
 
 # arn:aws:s3:::aws-fe-shop-import
 functions:
@@ -43,3 +81,13 @@ functions:
           rules:
             - prefix: uploaded/
           existing: true
+  catalogBatchProcess:
+    handler: handler.catalogBatchProcess
+    events:
+      - sqs:
+          batchSize: 5
+          arn: 
+            Fn::GetAtt: 
+              - SQSQueue
+              - Arn
+
