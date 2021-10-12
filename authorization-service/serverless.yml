@@ -19,4 +19,4 @@ resources:
 
 functions:
   basicAuthorizer:
-  handler: handler.basicAuthorizer
+    handler: handler.basicAuthorizer
