@@ -25,7 +25,7 @@ module.exports = (event, context, callback) => {
 
     try {
         const authorizationToken = event.authorizationToken;
-        const buff = Buffer.from(authorizationToken, 'base64'); //todo: look for definition
+        const buff = Buffer.from(authorizationToken, 'base64');
         const plainCreds = buff.toString('utf-8').split(':');
 
         const userName = plainCreds[0];
