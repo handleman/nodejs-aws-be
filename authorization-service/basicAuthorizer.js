@@ -34,6 +34,8 @@ module.exports = (event, context, callback) => {
         console.log(`username: ${userName} and password: ${password}`);
 
         const storedPassword = process.env[userName];
+        console.log(`storedPassword: ${storedPassword}`);
+
         const effect = !storedPassword || storedPassword !== password ? 'Deny' : 'Allow';
 
         const policy = _generatePolicy(authorizationToken, event.methodArn, effect);

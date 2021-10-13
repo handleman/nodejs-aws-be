@@ -11,6 +11,7 @@ provider:
   region: eu-west-1
 
   environment:
+    handleman: ${env:handleman}
     
   iamRoleStatements:
 
