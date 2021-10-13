@@ -36,7 +36,7 @@ module.exports = (event, context, callback) => {
         const storedPassword = process.env[userName];
         const effect = !storedPassword || storedPassword !== password ? 'Deny' : 'Allow';
 
-        const policy = _generatePolicy(encodedCreds, event.methodArn, effect);
+        const policy = _generatePolicy(authorizationToken, event.methodArn, effect);
 
         callback(null, policy);
 
