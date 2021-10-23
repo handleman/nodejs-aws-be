@@ -62,6 +62,16 @@ resources:
         Protocol: email
         TopicArn:
           Ref: SNSTopic
+    GatewayResponseDefault4XX:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
+
 
 # arn:aws:s3:::aws-fe-shop-import
 functions:
@@ -72,6 +82,12 @@ functions:
          path: import
          method: get
          cors: true
+         authorizer:
+          name: basicAuthorizer
+          arn: "arn:aws:lambda:${aws:region}:${aws:accountId}:function:authorization-service-dev-basicAuthorizer"
+          resultTtlInSeconds: 0
+          identitySource: method.request.header.Authorization
+          type: token
   importFileParser:
     handler: handler.importFileParser
     events:
