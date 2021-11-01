@@ -4,6 +4,8 @@ const axios = require('axios');
 const app = express();
 const port = process.env.PORT || 3002;
 
+app.use(express.json());
+
 app.all('/*', (req, res) => {
     let originalUrl = req.originalUrl;
     console.log('originalUrl', originalUrl);
