@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "eb:init": "eb init handleman-bff-api --platform node.js --region eu-west-1",
+    "eb:create": "eb create handleman-bff-api --cname handleman-bff-api-develop --single"
   },
   "author": "",
   "license": "ISC",
