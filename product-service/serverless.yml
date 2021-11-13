@@ -23,21 +23,21 @@ functions:
     handler: handler.getProductsList
     events:
       - http:
-         path: products
+         path: product
          method: get
          cors: true
   addProduct:
     handler: handler.addProduct
     events:
       - http:
-         path: products
+         path: product
          method: post
          cors: true
   getProductById:
     handler: handler.getProductById
     events:
       - http:
-          path: products/{id}
+          path: product/{id}
           method: get
           cors: true
           request:
